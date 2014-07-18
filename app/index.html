@@ -14,10 +14,13 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/ng-grid/ng-grid.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,app}) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/app.css">
   <!-- endbuild -->
 </head>
 <body ng-app="angularStarterKitApp">
@@ -32,8 +35,8 @@
       Starter<strong>APP</strong></a>
     </div>
     <ul class="nav navbar-nav">
-      <li data-match-route="/$"><a href="#/">Home</a></li>
-      <li data-match-route="/add"><a href="#/add">Admin</a></li>
+      <li data-match-route="/dashboard"><a href="#/dashboard">Home</a></li>
+      <li data-match-route="/add"><a href="#/admin">Admin</a></li>
     </ul>
     <ul class="nav navbar-nav pull-right" ng-if="!currentUser">
       <li data-match-route="/login"><a href="#/login">Login</a></li>
@@ -87,9 +90,11 @@
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
   <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+  <script src="bower_components/ng-grid/build/ng-grid.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/services/inflection.js"></script>
   <script src="scripts/app.js"></script>
   <script src="scripts/controllers/main.js"></script>
   <script src="scripts/controllers/login.js"></script>
@@ -101,6 +106,10 @@
   <script src="scripts/controllers/sidebar_nav.js"></script>
   <script src="scripts/controllers/master.js"></script>  
   <script src="scripts/services/view_master.js"></script>
+  <script src="scripts/services/store.js"></script>
+  <script src="scripts/services/model.js"></script>
+  <script src="scripts/services/resource_manager.js"></script>
+  <script src="scripts/controllers/employee.js"></script>
   <!-- endbuild -->
 </body>
 </html>

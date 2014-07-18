@@ -7,7 +7,7 @@ angular.module('angularStarterKitApp')
 
       return {
         isLoggedIn: function() {
-          // return true
+          return true;
           if ($cookieStore.get('user'))
             return true;
           return false;

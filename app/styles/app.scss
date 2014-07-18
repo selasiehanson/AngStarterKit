@@ -1,0 +1,45 @@
+.gridStyle {
+  height: 200px;
+}
+
+$ax-grid-border-color: #cccccc;
+$ax-grid-header-border-color: #AAAAAA;
+$ax-grid-header-border-size: 1px;
+$ax-ngTopPanel-bg: white;
+$ax-ngRow-odd-bg: white;
+$ax-ngRow-even-bg: white;
+$ax-grid-border-bottom-size: 1px;
+$ax-grid-border-bottom-color: #cecece;
+$ax-ng-sort-button-size-from-top: 12px;
+
+.ax-grid {
+  
+  .panel-body{
+    padding: 0px;
+  }
+
+  .ngTopPanel {
+    background: $ax-ngTopPanel-bg;
+    .ngHeaderCell {
+      border-top:  ($ax-grid-header-border-size - 1) solid $ax-grid-header-border-color;
+      border-bottom: $ax-grid-header-border-size solid $ax-grid-header-border-color;
+
+
+      .ngSortButtonUp, .ngSortButtonDown{
+        top: $ax-ng-sort-button-size-from-top;
+      }
+    }
+  }
+  .ngRow.odd {
+    background-color: $ax-ngRow-odd-bg;
+    .ngCell {
+      border-bottom: $ax-grid-border-bottom-size solid $ax-grid-border-bottom-color;
+    }
+  }
+  .ngRow.even {
+    background-color: $ax-ngRow-even-bg;
+    .ngCell {
+      border-bottom: 1px solid $ax-grid-border-bottom-color;
+    }
+  }
+}

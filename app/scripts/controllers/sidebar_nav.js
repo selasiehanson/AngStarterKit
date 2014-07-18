@@ -3,8 +3,11 @@
 angular.module('angularStarterKitApp')
   .controller('SidebarNavCtrl', function($scope) {
     $scope.links = [{
-      path: 'link1',
-      name: 'Link One'
+      path: 'dashboard',
+      name: 'Dahsboard'
+    }, {
+      path: 'employees',
+      name: 'Employees'
     }, {
       path: 'link2',
       name: 'Link Two'
