@@ -2,23 +2,23 @@
 
 /**
  * @ngdoc service
- * @name angularStarterKitApp.Model
+ * @name app.Model
  * @description
  * # Model
- * Service in the angularStarterKitApp.
+ * Service in the app.
  */
-angular.module('angularStarterKitApp')
+angular.module('app')
   .service('Model', function Model(Store, ResMgr) {
     this.delimeter = '::';
     this.namespace = 'App';
     this.transforms = {};
     this.url = '';
     // adapters ['SIMPLE_REST_ADAPTER', 'EMBEDDED_REST_ADAPTER', 'LOCAL_ADAPTER']
-    this.adapter = 'SIMPLE_REST_ADAPTER';
+    var defaulAdapter = 'SIMPLE_REST_ADAPTER';
     var self = this;
 
+    setAdapter();
     window[this.namespace] = {};
-
     //base model class
     function Model(params) {
       if (typeof(params) !== 'object') {
@@ -35,8 +35,7 @@ angular.module('angularStarterKitApp')
       this._data = params;
     }
 
-    // todo: dynmaically create $resource object
-
+    // Instance methods
     Model.prototype.create = function(params) {
       params = params || {};
       console.log('creating model');
@@ -50,14 +49,7 @@ angular.module('angularStarterKitApp')
       save(self.adapter, this._classParams.name, this._data);
     };
 
-    function save(restAdaperType, model, data) {
-      if (restAdaperType === 'SIMPLE_REST_ADAPTER') {
-        Store.insert(model, data);
-      } else {
-        //save to server before saving to store
 
-      }
-    }
 
     Model.prototype.update = function() {
       console.log('updating model');
@@ -74,6 +66,24 @@ angular.module('angularStarterKitApp')
 
     Model.prototype.fromJson = function() {
 
+    }
+
+    function save(restAdaperType, model, data) {
+      switch (restAdaperType) {
+        case 'LOCAL_ADAPTER':
+          Store.insert(model, data);
+          break
+        case 'SIMPLE_REST_ADAPTER':
+          // save data to server before store or make other decisions
+          Store.insert(model, data);
+          break;
+        case 'EMBEDDED_REST_ADAPTER':
+          // do more stuff with the data before saving
+          Store.insert(model, data);
+          break;
+        default:
+          break;
+      }
     }
 
     function klass(model, options) {
@@ -98,25 +108,72 @@ angular.module('angularStarterKitApp')
       };
       window[self.namespace][model].prototype = Object.create(Model.prototype);
 
-      window[self.namespace][model].all = function() {
-        console.log('querying objects');
+      // dynamic class methods
+      window[self.namespace][model].all = function(sync) {
+        sync = sync || false;
+        if (sync && self.adapter !== 'LOCAL_ADAPTER') {
+          // go to server first
+          ResMgr.query(model).then(function(response) {
+            // if response adapter is SIMPLE_REST_ADAPTER the response is all we get else we got to parse it well
+            return retrieveObjects(model, response)
+          });
+        }
+        return fetchRecordFromStore(model);
+      }
+
+      function retrieveObjects(model, response) {
+        var out;
+        switch (self.adapter) {
+          case 'LOCAL_ADAPTER':
+            out = fetchRecordFromStore(model);
+            break;
+          case 'SIMPLE_REST_ADAPTER':
+            out = retrieveAsSRA(model, response);
+            break;
+          case 'EMBEDDED_REST_ADAPTER':
+            out = retrieveAsEmbedded(model, response);
+            break;
+          default:
+            break;
+        }
+        return out;
+      }
+
+      function retrieveAsSRA(model, data) {
+        Store.insertBatch(appModel, data);
+        return fetchRecordFromStore(model);
+      }
+
+      function retrieveAsEmbedded(model, data) {
+        var filterExpression = /^\$/;
+        for (var i in data) {
+          if (!i.match(filterExpression)) {
+            var appModel = getModelName(i);
+            if (self.transforms[appModel]) {
+              //store this object
+              Store.insertBatch(appModel, data[i]);
+            }
+          }
+        }
+        return fetchRecordFromStore(model);
+      }
+
+      function fetchRecordFromStore(model) {
         var all = Store.all(getModelName(model));
-        console.log(all);
-        var out = all.map(function(x) {
+        return all.map(function(x) {
           return new window[self.namespace][model](x);
         });
-
-        return out;
       }
 
       window[self.namespace][model].find = function(id) {
         Store.find(getModelName(model), id);
       }
 
-      //Register the model as an agular resource
-      console.log(model)
+      //Register the model as an angular resource
       window.ResMgr = ResMgr;
-      ResMgr.register(model);
+      ResMgr.register(model, null, null, {
+        collectionAsArray: false
+      });
       // create the model but with no data
       Store.create(getModelName(model));
     }
@@ -193,9 +250,14 @@ angular.module('angularStarterKitApp')
       Store.insert(model, data);
     }
 
+    function setAdapter(adapter) {
+      self.adapter = adapter || defaulAdapter;
+    }
+
     return {
       klass: klass,
       transforms: self.transforms,
+      setAdapter: setAdapter,
       // transformData: transformData,
       insert: insert
     };

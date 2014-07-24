@@ -3,7 +3,7 @@
 describe('Controller: EmployeeCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('angularStarterKitApp'));
+  beforeEach(module('app'));
 
   var EmployeeCtrl,
     scope;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .directive('repeatPassword', function() {
     return {
       require: 'ngModel',

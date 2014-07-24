@@ -3,7 +3,7 @@
 describe('Service: viewMaster2', function () {
 
   // load the service's module
-  beforeEach(module('angularStarterKitApp'));
+  beforeEach(module('app'));
 
   // instantiate service
   var viewMaster2;

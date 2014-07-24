@@ -3,7 +3,7 @@
 describe('Directive: repeatPassword', function () {
 
   // load the directive's module
-  beforeEach(module('angularStarterKitApp'));
+  beforeEach(module('app'));
 
   var element,
     scope;

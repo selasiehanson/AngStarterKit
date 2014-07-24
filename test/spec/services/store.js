@@ -3,7 +3,7 @@
 describe('Service: Store', function () {
 
   // load the service's module
-  beforeEach(module('angularStarterKitApp'));
+  beforeEach(module('app'));
 
   // instantiate service
   var Store;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .controller('MasterCtrl', function ($scope, $rootScope) {
     $scope.classes = {
       sidebar: '',

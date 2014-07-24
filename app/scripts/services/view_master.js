@@ -1,4 +1,4 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .service('ViewMaster', function ViewMaster() {});

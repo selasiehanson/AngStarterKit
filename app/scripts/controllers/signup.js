@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .controller('SignupCtrl', function ($scope, Auth) {
     $scope.signup = function() {
       Auth.signup({

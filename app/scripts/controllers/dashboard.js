@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .controller('DashboardCtrl', function($scope, Store, Model) {
     $scope.objects = [];
     $scope.myData = [{

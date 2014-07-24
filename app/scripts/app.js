@@ -1,18 +1,19 @@
 'use strict';
 
-var app = angular.module('angularStarterKitApp', [
+var app = angular.module('app', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ui.router',
   'mgcrea.ngStrap',
-  'ngGrid'
+  'ngGrid',
+  'exrails.resourceManager'
 ]);
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function($stateProvider, $urlRouterProvider) {
   
 
-  $urlRouterProvider.otherwise('/dashboard');
+  
   $stateProvider
     .state('dashboard', {
       url: '/dashboard',
@@ -37,7 +38,9 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         controller: 'SignupCtrl'
       });
 
-    $locationProvider.html5Mode(false);  
+    $urlRouterProvider.otherwise('/dashboard');
+
+    // $locationProvider.html5Mode(false);  
 
 });
 
@@ -54,29 +57,27 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 //   });
 // });
 
-app.run(function ($rootScope, $location){
+// app.run(function ($rootScope, $location){
 
-});
-// app.run(['$rootScope', '$location', 'Auth',
-//   function($rootScope, $location, Auth) {
+// });
+app.run(['$rootScope', '$location', 'Auth',
+  function($rootScope, $location, Auth) {
 
-//     $rootScope.$on('$locationChangeStart', function(ev, next, current) {
+    $rootScope.$on('$locationChangeStart', function(ev, next, current) {
 
-//       var scope = $rootScope.$new();
+      var scope = $rootScope.$new();
 
-//       if (!Auth.isLoggedIn()) {
-//         scope.$emit('MSG:hide-sidebar');
-//         if ($location.path() !== '/signup') {
-//           $location.path('/login');
-//         }
-//       } else {
-//         scope.$emit('MSG:show-sidebar');
-//         if ($location.path() === '/login' || $location.path() === '/signup') {
-//           $location.path('/dashboard');
-//         }
-//       }
-//     });
-
-
-//   }
-// ]);
+      if (!Auth.isLoggedIn()) {
+        scope.$emit('MSG:hide-sidebar');
+        if ($location.path() !== '/signup') {
+          $location.path('/login');
+        }
+      } else {
+        scope.$emit('MSG:show-sidebar');
+        if ($location.path() === '/login' || $location.path() === '/signup') {
+          $location.path('/dashboard');
+        }
+      }
+    });
+  }
+]);

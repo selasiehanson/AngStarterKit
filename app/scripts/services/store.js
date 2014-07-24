@@ -2,19 +2,19 @@
 
 /**
  * @ngdoc service
- * @name angularStarterKitApp.Store
+ * @name app.Store
  * @description
  * # Store
- * Service in the angularStarterKitApp.
+ * Service in the app.
  */
-angular.module('angularStarterKitApp')
+angular.module('app')
   .service('Store', function Store() {
-    this.store = {};    
+    this.store = {};
     var self = this;
 
     // create key value pair in to store records of a particular type
     function create(model, data) {
-      data = data || [];      
+      data = data || [];
       self.store[model] = {
         data: data
       };
@@ -33,13 +33,20 @@ angular.module('angularStarterKitApp')
       merge(model, data);
     }
 
+    function insertBatch(model, data) {
+      data = data || [];
+      data.forEach(function(x) {
+        insert(model, x);
+      });
+    }
+
     // update our record in the store
     function update(model, data) {
 
     }
 
     // remove record from the store
-    function remove(model, id){
+    function remove(model, id) {
 
     }
 
@@ -51,8 +58,8 @@ angular.module('angularStarterKitApp')
     }
 
     /*
-    *PRIVATE FUNCTIONS
-    */
+     *PRIVATE FUNCTIONS
+     */
 
     function merge(model, data) {
       checkTableExists(model);
@@ -70,18 +77,20 @@ angular.module('angularStarterKitApp')
         var oldObject = find(model, data.id);
         if (oldObject) {
           for (var i in oldObject) {
-            oldObject[i] = x[i];
+            // reassign fields
+            oldObject[i] = data[i];
           }
         } else {
           self.store[model].data.push(data);
         }
       } else {
-        var ids = self.store[model].data.map(function (x){
-          console.log(x);
-          return x['id'];
+        var ids = self.store[model].data.map(function(x) {
+          return x.id;
         });
         var lastId = getMaxOfArray(ids);
-        console.log(lastId);
+        if (lastId < 0) {
+          lastId = 0
+        }
         data.id = lastId + 1;
         self.store[model].data.push(data);
       }
@@ -114,6 +123,7 @@ angular.module('angularStarterKitApp')
       create: create,
       find: find,
       insert: insert,
+      insertBatch: insertBatch,
       update: update,
       remove: remove,
       tables: tables,

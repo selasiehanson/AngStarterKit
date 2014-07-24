@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angularStarterKitApp')
+angular.module('app')
   .controller('SidebarNavCtrl', function($scope) {
     $scope.links = [{
       path: 'dashboard',
